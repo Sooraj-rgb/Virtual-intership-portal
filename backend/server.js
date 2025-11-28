@@ -8,6 +8,10 @@ app.use(express.json());
 app.use(cors());
 const studentRoutes = require("./routes/studentRoutes");
 app.use("/api/students", studentRoutes);
+const companyRoutes = require("./routes/companyRoutes");
+app.use("/api/companies", companyRoutes);
+const internshipRoutes = require("./routes/internshipRoutes");
+app.use("/api/internships", internshipRoutes);
 
 
 // ✅ Connect to MongoDB

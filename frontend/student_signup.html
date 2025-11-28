@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Student Signup | Virtual Internship Portal</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* extra student signup polish */
+    .container h2 {
+      margin-bottom: 10px;
+      font-size: 26px;
+    }
+
+    .container p {
+      font-size: 14px;
+      color: #eee;
+      opacity: 0.85;
+      margin-bottom: 25px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    input {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: #fff;
+      border-radius: 8px;
+      padding: 12px;
+      outline: none;
+      font-size: 15px;
+      transition: all 0.3s;
+    }
+
+    input::placeholder {
+      color: #ddd;
+      font-weight: 300;
+    }
+
+    input:focus {
+      border-color: #00c6ff;
+      background: rgba(255, 255, 255, 0.25);
+      box-shadow: 0 0 8px rgba(0, 198, 255, 0.6);
+    }
+
+    button {
+      background: linear-gradient(90deg, #00c6ff, #0072ff);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 12px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      background: linear-gradient(90deg, #0072ff, #00c6ff);
+      box-shadow: 0 5px 15px rgba(0, 114, 255, 0.4);
+    }
+
+    a {
+      color: #fff;
+      text-align: center;
+      margin-top: 10px;
+      font-size: 14px;
+      opacity: 0.85;
+      transition: opacity 0.3s;
+    }
+
+    a:hover {
+      opacity: 1;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Student Signup</h2>
+    <p>Create your account to apply for internships and connect with companies.</p>
+
+    <form id="signupForm">
+      <input type="text" id="name" placeholder="Full Name" required />
+      <input type="email" id="email" placeholder="Email Address" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <input type="text" id="skills" placeholder="Skills (comma separated)" />
+      <input type="text" id="education" placeholder="Education (e.g., BCA, B.Tech)" />
+      <input type="text" id="resumeLink" placeholder="Resume Link (Google Drive / PDF)" />
+      <button type="submit">Sign Up</button>
+      <a href="student_login.html">Already have an account? Login</a>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById("signupForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const res = await fetch("http://localhost:5000/api/students/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: document.getElementById("name").value.trim(),
+          email: document.getElementById("email").value.trim(),
+          password: document.getElementById("password").value.trim(),
+          skills: document.getElementById("skills").value.split(",").map(s => s.trim()),
+          education: document.getElementById("education").value.trim(),
+          resumeLink: document.getElementById("resumeLink").value.trim()
+        }),
+      });
+
+      const data = await res.json();
+      alert(data.message || data.error);
+
+      if (data.message === "Student registered successfully") {
+        window.location.href = "student_login.html";
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Student Dashboard | Virtual Internship Portal</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .dashboard {
+      text-align: center;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+      width: 420px;
+    }
+
+    h2 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    h3 {
+      font-size: 18px;
+      color: #aef;
+      margin-bottom: 20px;
+    }
+
+    .info {
+      text-align: left;
+      margin-top: 15px;
+      line-height: 1.6;
+      font-size: 15px;
+    }
+
+    .logout-btn {
+      margin-top: 25px;
+      background: linear-gradient(90deg, #ff4b2b, #ff416c);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 18px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .logout-btn:hover {
+      background: linear-gradient(90deg, #ff416c, #ff4b2b);
+      box-shadow: 0 5px 15px rgba(255, 65, 108, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .back-link {
+      display: block;
+      color: #fff;
+      margin-top: 15px;
+      text-decoration: none;
+      opacity: 0.8;
+      font-size: 14px;
+    }
+
+    .back-link:hover {
+      opacity: 1;
+      text-decoration: underline;
+    }
+    .browse-btn {
+      margin-top: 15px;
+      background: linear-gradient(90deg, #ff4b2b, #ff416c);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 18px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .browse-btn:hover {
+      background: linear-gradient(90deg, #ff416c, #ff4b2b);
+      box-shadow: 0 5px 15px rgba(255, 65, 108, 0.4);
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <h2 id="welcomeText">Welcome, Student</h2>
+    <h3>Your Profile</h3>
+
+    <div class="info" id="profileInfo"></div>
+
+    <button class="browse-btn" onclick="browseInternships()">Browse Internships</button>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+    <a class="back-link" href="index.html">← Back to Home</a>
+  </div>
+
+  <script>
+    const studentData = JSON.parse(localStorage.getItem("student"));
+    const token = localStorage.getItem("token");
+
+    if (!token || !studentData) {
+      alert("Unauthorized! Please log in first.");
+      window.location.href = "student_login.html";
+    }
+
+    // display info
+    document.getElementById("welcomeText").innerText = `Welcome, ${studentData.name || "Student"} 👋`;
+
+    document.getElementById("profileInfo").innerHTML = `
+      <strong>Email:</strong> ${studentData.email} <br>
+      <strong>Education:</strong> ${studentData.education || "Not specified"} <br>
+      <strong>Skills:</strong> ${(studentData.skills || []).join(", ")} <br>
+      <strong>Resume:</strong> ${
+        studentData.resumeLink
+          ? `<a href="${studentData.resumeLink}" target="_blank">View Resume</a>`
+          : "Not uploaded"
+      }
+    `;
+
+    function logout() {
+      localStorage.removeItem("token");
+      localStorage.removeItem("student");
+      alert("Logged out successfully!");
+      window.location.href = "index.html";
+    }
+    function browseInternships() {
+    window.location.href = "browse_internships.html";
+    }
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Browse Internships | Virtual Internship Portal</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      color: #fff;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(10px);
+    }
+
+    h2 {
+      text-align: center;
+      color: #00c6ff;
+      margin-bottom: 25px;
+    }
+
+    .internships {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 15px;
+      padding: 20px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 5px 15px rgba(0, 198, 255, 0.4);
+    }
+
+    .card h3 {
+      color: #00eaff;
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      font-size: 14px;
+      opacity: 0.9;
+      margin-bottom: 5px;
+    }
+
+    .card strong {
+      color: #fff;
+    }
+
+    button {
+      margin-top: 10px;
+      background: linear-gradient(90deg, #00c6ff, #0072ff);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background: linear-gradient(90deg, #0072ff, #00c6ff);
+      box-shadow: 0 4px 10px rgba(0, 114, 255, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: #fff;
+      opacity: 0.8;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .back-link:hover {
+      opacity: 1;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Available Internships</h2>
+    <div class="internships" id="internshipsContainer">
+      <p style="text-align:center;">Loading internships...</p>
+    </div>
+    <a class="back-link" href="student_dashboard.html">← Back to Dashboard</a>
+  </div>
+
+  <script>
+    async function fetchInternships() {
+      try {
+        const res = await fetch("http://localhost:5000/api/internships/all");
+        const internships = await res.json();
+
+        const container = document.getElementById("internshipsContainer");
+        container.innerHTML = "";
+
+        if (internships.length === 0) {
+          container.innerHTML = "<p style='text-align:center;'>No internships found.</p>";
+          return;
+        }
+
+        internships.forEach((internship) => {
+          const card = document.createElement("div");
+          card.classList.add("card");
+          card.innerHTML = `
+            <h3>${internship.title}</h3>
+            <p><strong>Company:</strong> ${internship.companyId?.name || "Unknown"}</p>
+            <p><strong>Location:</strong> ${internship.location}</p>
+            <p><strong>Duration:</strong> ${internship.duration}</p>
+            <p><strong>Stipend:</strong> ${internship.stipend || "Not specified"}</p>
+            <p>${internship.description}</p>
+            <button onclick="apply('${internship._id}')">Apply</button>
+          `;
+          container.appendChild(card);
+        });
+      } catch (err) {
+        console.error("Error fetching internships:", err);
+      }
+    }
+
+    function apply(id) {
+      alert(`Applied successfully for Internship ID: ${id}`);
+      // later we’ll connect this to backend route for applications
+    }
+
+    fetchInternships();
+  </script>
+</body>
+</html>

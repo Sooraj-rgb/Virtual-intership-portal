@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Virtual Internship Portal</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Virtual Internship Portal</h1>
+    <p>Connecting students, companies, and admins in one smart internship ecosystem.</p>
+
+    <button class="login-btn" onclick="openPopup('login')">Login</button>
+    <button class="signup-btn" onclick="openPopup('signup')">Sign Up</button>
+  </div>
+
+  <!-- Popup for selecting user type -->
+  <div class="popup" id="userPopup">
+    <div class="popup-content">
+      <h3 id="popupTitle"></h3>
+      <button onclick="navigate('student')">Student</button>
+      <button onclick="navigate('company')">Company</button>
+      <button onclick="navigate('admin')">Admin</button>
+      <br />
+      <button onclick="closePopup()">Close</button>
+    </div>
+  </div>
+
+  <script>
+    let currentAction = "";
+
+    function openPopup(action) {
+      currentAction = action;
+      document.getElementById("popupTitle").innerText =
+        "Choose your role to " + action;
+      document.getElementById("userPopup").style.display = "flex";
+    }
+
+    function closePopup() {
+      document.getElementById("userPopup").style.display = "none";
+    }
+
+    function navigate(role) {
+      if (currentAction === "login") {
+        window.location.href = `${role}_login.html`;
+      } else {
+        window.location.href = `${role}_signup.html`;
+      }
+    }
+  </script>
+</body>
+</html>
