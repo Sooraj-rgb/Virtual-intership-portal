@@ -12,7 +12,8 @@ const companyRoutes = require("./routes/companyRoutes");
 app.use("/api/companies", companyRoutes);
 const internshipRoutes = require("./routes/internshipRoutes");
 app.use("/api/internships", internshipRoutes);
-
+const adminRoutes = require("./routes/adminRoutes");
+app.use("/api/admin", adminRoutes);
 
 // ✅ Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)

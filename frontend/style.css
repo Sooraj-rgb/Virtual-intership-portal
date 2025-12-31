@@ -7,11 +7,17 @@ body {
   font-family: "Poppins", sans-serif;
   background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
   color: #fff;
-  height: 100vh;
+  min-height: 100vh;
   margin: 0;
+  /* Remove global flex centering so pages can scroll normally */
+}
+
+/* Utility class to center auth-like pages without affecting global layout */
+.auth-center {
   display: flex;
   justify-content: center;
   align-items: center;
+  min-height: 100vh;
 }
 
 .container {

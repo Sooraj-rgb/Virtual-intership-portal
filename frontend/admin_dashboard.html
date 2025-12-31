@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard | Virtual Internship Portal</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      background: radial-gradient(circle at top, #2c0e37, #6a0572, #9d4edd);
+      color: #fff;
+      font-family: "Poppins", sans-serif;
+    }
+
+    .dashboard {
+      max-width: 900px;
+      margin: 60px auto;
+      padding: 30px;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(12px);
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    h2 {
+      text-align: center;
+      color: #ff9ecd;
+      margin-bottom: 5px;
+    }
+
+    h4 {
+      text-align: center;
+      opacity: 0.85;
+      margin-bottom: 30px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.15);
+      padding: 25px;
+      border-radius: 15px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 5px 15px rgba(255, 158, 205, 0.4);
+    }
+
+    .card h3 {
+      margin-bottom: 10px;
+      color: #ffd6ff;
+    }
+
+    .card p {
+      font-size: 14px;
+      opacity: 0.9;
+      margin-bottom: 15px;
+    }
+
+    .card button {
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(90deg, #ff4d6d, #c9184a);
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .card button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(255, 77, 109, 0.4);
+    }
+
+    .logout {
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    .logout button {
+      background: linear-gradient(90deg, #ffb703, #fb8500);
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .logout button:hover {
+      box-shadow: 0 4px 12px rgba(251, 133, 0, 0.5);
+    }
+  </style>
+</head>
+<body>
+
+<div class="dashboard">
+  <h2 id="adminName">Welcome, Admin</h2>
+  <h4>Administrator Control Panel</h4>
+
+  <div class="cards">
+    <div class="card">
+      <h3>Students</h3>
+      <p>View and manage registered students</p>
+      <button onclick="go('admin_students.html')">View Students</button>
+    </div>
+
+    <div class="card">
+      <h3>Companies</h3>
+      <p>View and manage registered companies</p>
+      <button onclick="go('admin_companies.html')">View Companies</button>
+    </div>
+    <div class="card">
+      <h3>Internships</h3>
+      <p>View and manage internship listings</p>
+      <button onclick="go('admin_internships.html')">View Internships</button>
+    </div>
+  </div>
+    <div class="logout">
+        <button onclick="logout()">Logout</button>
+    </div>
+</div>
+<script>
+    const admin = JSON.parse(localStorage.getItem("admin"));
+  const token = localStorage.getItem("adminToken");
+
+  if (!admin || !token) {
+    alert("Unauthorized! Please login.");
+    window.location.href = "admin_login.html";
+  }
+
+  document.getElementById("adminName").innerText =
+    `Welcome, ${admin.name} 👑`;
+
+  function go(page) {
+    window.location.href = page;
+  }
+
+  function logout() {
+    localStorage.removeItem("adminToken");
+    localStorage.removeItem("admin");
+    alert("Logged out successfully");
+    window.location.href = "index.html";
+  }
+</script>
+
+</body>
+</html>
+
