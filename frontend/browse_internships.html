@@ -138,6 +138,21 @@
       alert(`Applied successfully for Internship ID: ${id}`);
       // later we’ll connect this to backend route for applications
     }
+    function applyInternship(internshipId) {
+  const student = JSON.parse(localStorage.getItem("student"));
+
+  fetch("http://localhost:5000/api/applications/apply", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      studentId: student._id,
+      internshipId,
+    }),
+  })
+  .then(res => res.json())
+  .then(data => alert(data.message));
+}
+
 
     fetchInternships();
   </script>
