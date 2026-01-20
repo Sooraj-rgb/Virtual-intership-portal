@@ -56,5 +56,46 @@ router.get("/all", async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 });
+const calculateMatchScore = require("../ai/matchInternships");
+const Student = require("../models/Student");
 
+// AI RECOMMENDATION
+router.get("/recommend/:studentId", async (req, res) => {
+  try {
+    const student = await Student.findById(req.params.studentId);
+    if (!student) {
+      return res.status(404).json({ message: "Student not found" });
+    }
+
+    const internships = await Internship.find().populate("companyId", "name");
+
+    const studentText =
+      `${student.course || ""} ${(student.skills || []).join(" ")}`;
+
+    const allDocs = internships.map(i =>
+      `${i.title} ${i.description}`
+    );
+
+    const results = internships.map(i => {
+      const internshipText = `${i.title} ${i.description}`;
+
+      const score = calculateSimilarity(
+        studentText,
+        internshipText,
+        allDocs
+      );
+
+      return {
+        internship: i,
+        matchScore: score,
+      };
+    });
+
+    results.sort((a, b) => b.matchScore - a.matchScore);
+    res.json(results);
+  } catch (err) {
+    console.error("AI recommend error:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
 module.exports = router;

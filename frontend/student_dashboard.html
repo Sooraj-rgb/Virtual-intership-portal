@@ -95,6 +95,11 @@
     <h3>Your Profile</h3>
 
     <div class="info" id="profileInfo"></div>
+    <h3 style="margin-top:20px;color:#00eaff;">AI Recommended Internships</h3>
+    <div id="aiResults" class="info">
+    <p>Loading recommendations...</p>
+    </div>
+
 
     <button class="browse-btn" onclick="browseInternships()">Browse Internships</button>
     <button class="logout-btn" onclick="logout()">Logout</button>
@@ -133,6 +138,39 @@
     function browseInternships() {
     window.location.href = "browse_internships.html";
     }
+async function loadAIRecommendations() {
+  try {
+    const res = await fetch(
+      `http://localhost:5000/api/internships/recommend/${student._id}`
+    );
+    const data = await res.json();
+
+    const box = document.getElementById("aiResults");
+    box.innerHTML = "";
+
+    if (!data.length) {
+      box.innerHTML = "<p>No recommendations available.</p>";
+      return;
+    }
+
+    data.slice(0, 5).forEach(item => {
+      const div = document.createElement("div");
+      div.style.marginBottom = "10px";
+      div.innerHTML = `
+        <strong>${item.internship.title}</strong><br>
+        Company: ${item.internship.companyId.name}<br>
+        Match Score: <b>${item.matchScore}%</b>
+        <hr style="opacity:0.2;">
+      `;
+      box.appendChild(div);
+    });
+  } catch (err) {
+    console.error("AI load error:", err);
+  }
+}
+
+// call it when dashboard loads
+loadAIRecommendations();
 
   </script>
 </body>

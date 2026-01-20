@@ -3,6 +3,9 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Company = require("../models/Company");
+router.get("/test", (req, res) => {
+  res.send("COMPANY ROUTES WORKING");
+});
 
 // ✅ Company Signup
 router.post("/signup", async (req, res) => {
