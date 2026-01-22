@@ -104,7 +104,25 @@
     <button class="browse-btn" onclick="browseInternships()">Browse Internships</button>
     <button class="logout-btn" onclick="logout()">Logout</button>
     <a class="back-link" href="index.html">← Back to Home</a>
+  <!-- Chat Toggle Button -->
+<div id="chatToggle" onclick="toggleChat()">💬</div>
+
+<!-- Chat Window -->
+<div id="chatWindow">
+  <div id="chatHeader">
+    AI Assistant
+    <span onclick="toggleChat()">✕</span>
   </div>
+
+  <div id="chatBody"></div>
+
+  <div id="chatFooter">
+    <input id="chatInput" placeholder="Ask something..." />
+    <button onclick="sendMsg()">Send</button>
+  </div>
+</div>
+
+
 
   <script>
     const studentData = JSON.parse(localStorage.getItem("student"));
@@ -171,6 +189,31 @@ async function loadAIRecommendations() {
 
 // call it when dashboard loads
 loadAIRecommendations();
+
+function toggleChat() {
+  const win = document.getElementById("chatWindow");
+  win.style.display = win.style.display === "flex" ? "none" : "flex";
+}
+
+async function sendMsg() {
+  const input = document.getElementById("chatInput");
+  const body = document.getElementById("chatBody");
+  const msg = input.value.trim();
+  if (!msg) return;
+
+  body.innerHTML += `<div class="msg user">${msg}</div>`;
+  input.value = "";
+
+  const res = await fetch("http://localhost:5000/api/ai/chat", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message: msg })
+  });
+
+  const data = await res.json();
+  body.innerHTML += `<div class="msg ai">${data.reply}</div>`;
+  body.scrollTop = body.scrollHeight;
+}
 
   </script>
 </body>

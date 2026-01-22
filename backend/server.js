@@ -16,6 +16,8 @@ const adminRoutes = require("./routes/adminRoutes");
 app.use("/api/admin", adminRoutes);
 const applicationRoutes = require("./routes/applicationRoutes");
 app.use("/api/applications", applicationRoutes);
+const aiRoutes = require("./routes/aiRoutes");
+app.use("/api/ai", aiRoutes);
 
 
 // ✅ Connect to MongoDB
