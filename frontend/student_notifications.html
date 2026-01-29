@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Notifications | Virtual Internship Portal</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      color: #fff;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(10px);
+    }
+
+    h2 {
+      text-align: center;
+      color: #00c6ff;
+      margin-bottom: 25px;
+    }
+
+    .notification {
+      background: rgba(255, 255, 255, 0.12);
+      border-left: 5px solid #ffaa00;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 15px;
+      transition: all 0.3s ease;
+    }
+
+    .notification:hover {
+      box-shadow: 0 3px 10px rgba(0, 198, 255, 0.3);
+    }
+
+    .notification.accepted {
+      border-left-color: #00ff88;
+      background: rgba(0, 255, 136, 0.1);
+    }
+
+    .notification.rejected {
+      border-left-color: #ff4444;
+      background: rgba(255, 68, 68, 0.1);
+    }
+
+    .notification.pending {
+      border-left-color: #ffaa00;
+      background: rgba(255, 170, 0, 0.1);
+    }
+
+    .notification-title {
+      font-size: 16px;
+      font-weight: bold;
+      color: #00eaff;
+      margin-bottom: 5px;
+    }
+
+    .notification-text {
+      font-size: 14px;
+      margin-bottom: 8px;
+      opacity: 0.9;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .status-badge.accepted {
+      background: #00ff88;
+      color: #000;
+    }
+
+    .status-badge.rejected {
+      background: #ff4444;
+      color: #fff;
+    }
+
+    .status-badge.pending {
+      background: #ffaa00;
+      color: #000;
+    }
+
+    .time {
+      font-size: 12px;
+      color: #aaa;
+      margin-top: 8px;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 40px;
+      color: #aaa;
+    }
+
+    .back-link {
+      display: inline-block;
+      color: #fff;
+      text-decoration: none;
+      margin-bottom: 20px;
+      opacity: 0.8;
+      font-size: 14px;
+    }
+
+    .back-link:hover {
+      opacity: 1;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a class="back-link" href="student_dashboard.html">← Back to Dashboard</a>
+    <h2>📬 Notifications</h2>
+    <div id="notificationsContainer"></div>
+  </div>
+
+  <script>
+    const student = JSON.parse(localStorage.getItem("student"));
+
+    if (!student || !student._id) {
+      document.getElementById("notificationsContainer").innerHTML = 
+        "<p style='color:red;'>Error: Please log in first.</p>";
+    } else {
+      fetchNotifications();
+    }
+
+    async function fetchNotifications() {
+      try {
+        const res = await fetch(`http://localhost:5000/api/applications/student/${student._id}`);
+        const applications = await res.json();
+
+        const container = document.getElementById("notificationsContainer");
+
+        if (!Array.isArray(applications) || applications.length === 0) {
+          container.innerHTML = '<div class="empty"><p>No notifications yet. Apply to internships to get started!</p></div>';
+          return;
+        }
+
+        container.innerHTML = "";
+
+        applications.forEach(app => {
+          const statusMessages = {
+            accepted: `Great news! Your application for <b>${app.internshipId.title}</b> at <b>${app.internshipId.companyId?.name || "the company"}</b> has been <span style="color:#00ff88;">ACCEPTED</span>! 🎉`,
+            rejected: `Your application for <b>${app.internshipId.title}</b> has been <span style="color:#ff4444;">REJECTED</span>. Don't worry, keep applying!`,
+            pending: `Your application for <b>${app.internshipId.title}</b> is <span style="color:#ffaa00;">PENDING</span> review. We'll notify you soon!`
+          };
+
+          const notification = document.createElement("div");
+          notification.className = `notification ${app.status}`;
+          notification.innerHTML = `
+            <div class="notification-title">${app.internshipId.title}</div>
+            <div class="notification-text">${statusMessages[app.status]}</div>
+            <span class="status-badge ${app.status}">${app.status.toUpperCase()}</span>
+            <div class="time">${new Date(app.createdAt).toLocaleDateString()}</div>
+          `;
+          container.appendChild(notification);
+        });
+      } catch (err) {
+        console.error("Error fetching notifications:", err);
+        document.getElementById("notificationsContainer").innerHTML = 
+          `<p style='color:red;'>Error loading notifications: ${err.message}</p>`;
+      }
+    }
+  </script>
+</body>
+</html>

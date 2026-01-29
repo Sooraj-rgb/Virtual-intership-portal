@@ -125,7 +125,7 @@
             <p><strong>Duration:</strong> ${internship.duration}</p>
             <p><strong>Stipend:</strong> ${internship.stipend || "Not specified"}</p>
             <p>${internship.description}</p>
-            <button onclick="apply('${internship._id}')">Apply</button>
+            <button onclick="applyInternship('${internship._id}')">Apply</button>
           `;
           container.appendChild(card);
         });
@@ -134,10 +134,7 @@
       }
     }
 
-    function apply(id) {
-      alert(`Applied successfully for Internship ID: ${id}`);
-      // later we’ll connect this to backend route for applications
-    }
+
     function applyInternship(internshipId) {
   const student = JSON.parse(localStorage.getItem("student"));
 

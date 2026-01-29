@@ -5,6 +5,13 @@
   <title>Company Dashboard | Virtual Internship Portal</title>
   <link rel="stylesheet" href="style.css" />
   <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
     .dashboard {
       text-align: center;
       background: rgba(255, 255, 255, 0.1);
@@ -70,6 +77,9 @@
       box-shadow: 0 5px 15px rgba(255, 65, 108, 0.4);
       transform: translateY(-2px);
     }
+    .btn-view {
+      background: linear-gradient(90deg, #1e3c72, #2a5298);
+    }
 
     .back-link {
       display: block;
@@ -96,6 +106,8 @@
     <div class="actions">
       <button class="btn btn-post" onclick="goToPost()">Post Internship</button>
       <button class="btn btn-logout" onclick="logout()">Logout</button>
+      <button class="btn btn-view" onclick="location.href='company_applicants.html'"> View Applicants</button>
+
     </div>
 
     <a class="back-link" href="index.html">← Back to Home</a>

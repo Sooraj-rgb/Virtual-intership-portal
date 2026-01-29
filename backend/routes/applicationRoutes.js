@@ -41,7 +41,7 @@ router.get("/company/:companyId", async (req, res) => {
     const applications = await Application.find({
       companyId: req.params.companyId,
     })
-      .populate("studentId", "name email skills")
+      .populate("studentId", "name email skills education")
       .populate("internshipId", "title");
 
     res.status(200).json(applications);
@@ -64,6 +64,22 @@ router.put("/:id/status", async (req, res) => {
     res.status(200).json({ message: `Application ${status}` });
   } catch (err) {
     console.error("Update status error:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+/* ---------------- STUDENT VIEW APPLICATIONS / NOTIFICATIONS ---------------- */
+router.get("/student/:studentId", async (req, res) => {
+  try {
+    const applications = await Application.find({
+      studentId: req.params.studentId,
+    })
+      .populate("internshipId", "title")
+      .populate("internshipId.companyId", "name");
+
+    res.status(200).json(applications);
+  } catch (err) {
+    console.error("Student view applications error:", err);
     res.status(500).json({ error: "Server error" });
   }
 });

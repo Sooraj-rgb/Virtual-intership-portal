@@ -87,6 +87,22 @@
       box-shadow: 0 5px 15px rgba(255, 65, 108, 0.4);
       transform: translateY(-2px);
     }
+    .notification-btn {
+      margin-top: 15px;
+      background: linear-gradient(90deg, #fdbb2d, #ffaa00);
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 18px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .notification-btn:hover {
+      background: linear-gradient(90deg, #ffaa00, #fdbb2d);
+      box-shadow: 0 5px 15px rgba(253, 187, 45, 0.4);
+      transform: translateY(-2px);
+    }
   </style>
 </head>
 <body class="auth-center">
@@ -102,6 +118,7 @@
 
 
     <button class="browse-btn" onclick="browseInternships()">Browse Internships</button>
+    <button class="notification-btn" onclick="viewNotifications()">📬 Notifications</button>
     <button class="logout-btn" onclick="logout()">Logout</button>
     <a class="back-link" href="index.html">← Back to Home</a>
   <!-- Chat Toggle Button -->
@@ -153,8 +170,13 @@
       alert("Logged out successfully!");
       window.location.href = "index.html";
     }
+    
     function browseInternships() {
-    window.location.href = "browse_internships.html";
+      window.location.href = "browse_internships.html";
+    }
+    
+    function viewNotifications() {
+      window.location.href = "student_notifications.html";
     }
 async function loadAIRecommendations() {
   try {

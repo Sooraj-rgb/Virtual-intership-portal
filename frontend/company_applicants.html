@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Applicants</title>
+  <style>
+    body { font-family: Arial; background:#0f172a; color:white; padding:20px; }
+    .card { background:#111827; padding:15px; border-radius:10px; margin-bottom:15px; }
+    .name { color:#00eaff; font-weight:bold; }
+    .actions { display: flex; gap: 10px; margin-top: 10px; }
+    .btn-accept { background: #00ff88; color: #000; padding: 8px 15px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+    .btn-accept:hover { background: #00dd6f; }
+    .btn-reject { background: #ff4444; color: #fff; padding: 8px 15px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+    .btn-reject:hover { background: #dd0000; }
+    .status-pending { color: #ffaa00; }
+    .status-accepted { color: #00ff88; }
+    .status-rejected { color: #ff4444; }
+    .back-link { color: #fff; text-decoration: none; margin-bottom: 20px; display: inline-block; opacity: 0.8; font-size: 14px; }
+    .back-link:hover { opacity: 1; text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<a class="back-link" href="company_dashboard.html">← Back to Dashboard</a>
+<h2>Applicants</h2>
+<div id="list"></div>
+
+<script>
+const company = JSON.parse(localStorage.getItem("company"));
+const token = localStorage.getItem("companyToken");
+
+console.log("Company:", company);
+console.log("Company ID:", company?._id);
+
+if (!company || !company._id) {
+  document.getElementById("list").innerHTML = "<p style='color:red;'>Error: Company not logged in. Please log in first.</p>";
+} else {
+  fetch(`http://localhost:5000/api/applications/company/${company._id}`, {
+    headers: {
+      "Authorization": "Bearer " + token
+    }
+  })
+  .then(res => {
+    console.log("Response status:", res.status);
+    return res.json();
+  })
+  .then(data => {
+    console.log("API Response:", data);
+    const box = document.getElementById("list");
+
+    if (!Array.isArray(data)) {
+      box.innerHTML = `<p style='color:red;'>Error: ${data.error || JSON.stringify(data)}</p>`;
+      return;
+    }
+
+    if (!data.length) {
+      box.innerHTML = "<p>No applications yet.</p>";
+      return;
+    }
+
+    data.forEach(app => {
+      const div = document.createElement("div");
+      div.className = "card";
+      const statusClass = `status-${app.status}`;
+      const buttonsHTML = app.status === 'pending' ? `
+        <div class="actions">
+          <button class="btn-accept" onclick="updateStatus('${app._id}', 'accepted')">Accept</button>
+          <button class="btn-reject" onclick="updateStatus('${app._id}', 'rejected')">Reject</button>
+        </div>
+      ` : '';
+      div.innerHTML = `
+        <div class="name">${app.studentId.name}</div>
+        <p>Email: ${app.studentId.email}</p>
+        <p>Education: ${app.studentId.education || "-"}</p>
+        <p>Skills: ${(app.studentId.skills || []).join(", ")}</p>
+        <p>Internship: <b>${app.internshipId.title}</b></p>
+        <p>Status: <span class="${statusClass}">${app.status.toUpperCase()}</span></p>
+        ${buttonsHTML}
+      `;
+      box.appendChild(div);
+    });
+  })
+  .catch(err => {
+    console.error("Fetch error:", err);
+    document.getElementById("list").innerHTML = `<p style='color:red;'>Error loading applicants: ${err.message}</p>`;
+  });
+}
+
+function updateStatus(applicationId, status) {
+  fetch(`http://localhost:5000/api/applications/${applicationId}/status`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ status })
+  })
+  .then(res => res.json())
+  .then(data => {
+    alert(data.message);
+    location.reload();
+  })
+  .catch(err => {
+    console.error("Error updating status:", err);
+    alert("Failed to update status");
+  });
+}
+</script>
+
+</body>
+</html>
