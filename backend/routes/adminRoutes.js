@@ -12,14 +12,25 @@ const adminAuth = require("../middleware/adminAuth");
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
+    
+    console.log("🔐 Admin Login Attempt:");
+    console.log(`   Email received: "${email}"`);
+    console.log(`   Password received: "${password}"`);
+    console.log(`   Email lowercase: "${email.toLowerCase()}"`);
 
-    const admin = await Admin.findOne({ email });
+    const admin = await Admin.findOne({ email: email.toLowerCase() });
+    console.log(`   Admin found: ${admin ? "✅ YES" : "❌ NO"}`);
+    
     if (!admin) {
+      console.log("   → Reason: Admin not found in database");
       return res.status(400).json({ message: "Invalid email or password" });
     }
 
     const isMatch = await bcrypt.compare(password, admin.password);
+    console.log(`   Password match: ${isMatch ? "✅ YES" : "❌ NO"}`);
+    
     if (!isMatch) {
+      console.log("   → Reason: Password does not match");
       return res.status(400).json({ message: "Invalid email or password" });
     }
 
