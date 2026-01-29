@@ -8,36 +8,6 @@ const Company = require("../models/Company.js");
 const Internship = require("../models/Internship.js");
 const adminAuth = require("../middleware/adminAuth");
 
-// ✅ ADMIN SIGNUP
-router.post("/signup", async (req, res) => {
-  try {
-    const { name, email, password } = req.body;
-
-    // check existing admin
-    const existing = await Admin.findOne({ email });
-    if (existing) {
-      return res.status(400).json({ message: "Admin already exists" });
-    }
-
-    // hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const admin = new Admin({
-      name,
-      email,
-      password: hashedPassword,
-    });
-
-    await admin.save();
-
-    res.status(201).json({ message: "Admin registered successfully" });
-  } catch (err) {
-    console.error("❌ Admin signup error:", err);
-    res.status(500).json({ error: "Server error" });
-  }
-});
-
-
 // ✅ ADMIN LOGIN
 router.post("/login", async (req, res) => {
   try {
