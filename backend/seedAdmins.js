@@ -28,7 +28,7 @@ const admins = [
 
 async function seedAdmins() {
   try {
-    await mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost:27017/internship_portal");
+    await mongoose.connect(process.env.MONGO_URI || "mongodb://localhost:27017/internship_portal");
     
     console.log("🗑️  Deleting all existing admins...");
     await Admin.deleteMany({});

@@ -56,7 +56,18 @@ router.get("/all", async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 });
-const calculateMatchScore = require("../ai/matchInternships");
+
+// ✅ GET: Internships by Company ID
+router.get("/company/:companyId", verifyCompanyToken, async (req, res) => {
+  try {
+    const internships = await Internship.find({ companyId: req.companyId }).populate("companyId", "name email industry");
+    res.status(200).json(internships);
+  } catch (err) {
+    console.error("❌ Error fetching company internships:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+const calculateSimilarity = require("../ai/matchInternships");
 const Student = require("../models/Student");
 
 // AI RECOMMENDATION

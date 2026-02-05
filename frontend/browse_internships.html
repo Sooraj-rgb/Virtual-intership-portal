@@ -90,11 +90,120 @@
       opacity: 1;
       text-decoration: underline;
     }
+
+    .search-container {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 25px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .search-input {
+      padding: 12px 16px;
+      border-radius: 8px;
+      border: 1px solid rgba(0, 198, 255, 0.3);
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      font-size: 14px;
+      min-width: 250px;
+      transition: all 0.3s ease;
+    }
+
+    .search-input::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .search-input:focus {
+      outline: none;
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(0, 198, 255, 0.6);
+      box-shadow: 0 0 10px rgba(0, 198, 255, 0.2);
+    }
+
+    .search-btn {
+      padding: 12px 24px;
+      background: linear-gradient(90deg, #00c6ff, #0072ff);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .search-btn:hover {
+      background: linear-gradient(90deg, #0072ff, #00c6ff);
+      box-shadow: 0 4px 10px rgba(0, 114, 255, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .clear-btn {
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .clear-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    .filter-tags {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .filter-tag {
+      padding: 6px 12px;
+      background: rgba(0, 198, 255, 0.2);
+      border: 1px solid rgba(0, 198, 255, 0.4);
+      border-radius: 20px;
+      color: #00eaff;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .filter-tag:hover {
+      background: rgba(0, 198, 255, 0.3);
+      border-color: rgba(0, 198, 255, 0.6);
+    }
+
+    .filter-tag.active {
+      background: rgba(0, 198, 255, 0.4);
+      border-color: rgba(0, 198, 255, 0.8);
+    }
   </style>
 </head>
 <body class="auth-center">
   <div class="container">
     <h2>Available Internships</h2>
+    
+    <div class="search-container">
+      <input 
+        type="text" 
+        class="search-input" 
+        id="searchInput" 
+        placeholder="Search by title, company, or location..."
+        onkeyup="handleSearch()"
+      >
+      <button class="search-btn" onclick="handleSearch()">🔍 Search</button>
+      <button class="clear-btn" onclick="clearSearch()">Clear</button>
+    </div>
+
+    <div class="filter-tags" id="filterTags"></div>
+
     <div class="internships" id="internshipsContainer">
       <p style="text-align:center;">Loading internships...</p>
     </div>
@@ -102,54 +211,87 @@
   </div>
 
   <script>
+    let allInternships = [];
+
     async function fetchInternships() {
       try {
         const res = await fetch("http://localhost:5000/api/internships/all");
-        const internships = await res.json();
-
-        const container = document.getElementById("internshipsContainer");
-        container.innerHTML = "";
-
-        if (internships.length === 0) {
-          container.innerHTML = "<p style='text-align:center;'>No internships found.</p>";
-          return;
-        }
-
-        internships.forEach((internship) => {
-          const card = document.createElement("div");
-          card.classList.add("card");
-          card.innerHTML = `
-            <h3>${internship.title}</h3>
-            <p><strong>Company:</strong> ${internship.companyId?.name || "Unknown"}</p>
-            <p><strong>Location:</strong> ${internship.location}</p>
-            <p><strong>Duration:</strong> ${internship.duration}</p>
-            <p><strong>Stipend:</strong> ${internship.stipend || "Not specified"}</p>
-            <p>${internship.description}</p>
-            <button onclick="applyInternship('${internship._id}')">Apply</button>
-          `;
-          container.appendChild(card);
-        });
+        allInternships = await res.json();
+        displayInternships(allInternships);
       } catch (err) {
         console.error("Error fetching internships:", err);
       }
     }
 
+    function displayInternships(internships) {
+      const container = document.getElementById("internshipsContainer");
+      container.innerHTML = "";
+
+      if (internships.length === 0) {
+        container.innerHTML = "<p style='text-align:center;'>No internships found.</p>";
+        return;
+      }
+
+      internships.forEach((internship) => {
+        const card = document.createElement("div");
+        card.classList.add("card");
+        card.innerHTML = `
+          <h3>${internship.title}</h3>
+          <p><strong>Company:</strong> ${internship.companyId?.name || "Unknown"}</p>
+          <p><strong>Location:</strong> ${internship.location}</p>
+          <p><strong>Duration:</strong> ${internship.duration}</p>
+          <p><strong>Stipend:</strong> ${internship.stipend || "Not specified"}</p>
+          <p>${internship.description}</p>
+          <button onclick="applyInternship('${internship._id}')">Apply</button>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function handleSearch() {
+      const searchTerm = document.getElementById("searchInput").value.toLowerCase().trim();
+      
+      if (!searchTerm) {
+        displayInternships(allInternships);
+        return;
+      }
+
+      const filtered = allInternships.filter(internship => {
+        const title = internship.title.toLowerCase();
+        const company = internship.companyId?.name?.toLowerCase() || "";
+        const location = internship.location.toLowerCase();
+        const description = internship.description.toLowerCase();
+        
+        return (
+          title.includes(searchTerm) ||
+          company.includes(searchTerm) ||
+          location.includes(searchTerm) ||
+          description.includes(searchTerm)
+        );
+      });
+
+      displayInternships(filtered);
+    }
+
+    function clearSearch() {
+      document.getElementById("searchInput").value = "";
+      displayInternships(allInternships);
+    }
 
     function applyInternship(internshipId) {
-  const student = JSON.parse(localStorage.getItem("student"));
+      const student = JSON.parse(localStorage.getItem("student"));
 
-  fetch("http://localhost:5000/api/applications/apply", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      studentId: student._id,
-      internshipId,
-    }),
-  })
-  .then(res => res.json())
-  .then(data => alert(data.message));
-}
-
+      fetch("http://localhost:5000/api/applications/apply", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          studentId: student._id,
+          internshipId,
+        }),
+      })
+      .then(res => res.json())
+      .then(data => alert(data.message));
+    }
 
     fetchInternships();
   </script>

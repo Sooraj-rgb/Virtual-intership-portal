@@ -181,7 +181,7 @@
 async function loadAIRecommendations() {
   try {
     const res = await fetch(
-      `http://localhost:5000/api/internships/recommend/${student._id}`
+      `http://localhost:5000/api/internships/recommend/${studentData._id}`
     );
     const data = await res.json();
 
@@ -195,17 +195,49 @@ async function loadAIRecommendations() {
 
     data.slice(0, 5).forEach(item => {
       const div = document.createElement("div");
-      div.style.marginBottom = "10px";
+      div.style.marginBottom = "15px";
+      div.style.padding = "10px";
+      div.style.border = "1px solid rgba(255, 255, 255, 0.2)";
+      div.style.borderRadius = "8px";
       div.innerHTML = `
         <strong>${item.internship.title}</strong><br>
         Company: ${item.internship.companyId.name}<br>
-        Match Score: <b>${item.matchScore}%</b>
-        <hr style="opacity:0.2;">
+        Match Score: <b>${item.matchScore}%</b><br>
+        <button onclick="applyForInternship('${item.internship._id}')" style="margin-top: 8px; padding: 6px 12px; background: linear-gradient(90deg, #00d4ff, #0099cc); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; transition: all 0.3s ease;" onmouseover="this.style.background='linear-gradient(90deg, #0099cc, #00d4ff)'" onmouseout="this.style.background='linear-gradient(90deg, #00d4ff, #0099cc)'">Apply Now</button>
       `;
       box.appendChild(div);
     });
   } catch (err) {
     console.error("AI load error:", err);
+  }
+}
+
+async function applyForInternship(internshipId) {
+  try {
+    const res = await fetch("http://localhost:5000/api/applications/apply", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        studentId: studentData._id,
+        internshipId: internshipId
+      })
+    });
+
+    const data = await res.json();
+    
+    if (!res.ok) {
+      alert(data.message || "Failed to apply");
+      return;
+    }
+
+    alert("Application submitted successfully! 🎉");
+    // Reload recommendations after applying
+    loadAIRecommendations();
+  } catch (err) {
+    console.error("Apply error:", err);
+    alert("Error submitting application. Please try again.");
   }
 }
 

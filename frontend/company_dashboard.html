@@ -43,19 +43,22 @@
     .actions {
       margin-top: 25px;
       display: flex;
-      justify-content: space-around;
+      flex-wrap: wrap;
+      justify-content: center;
       gap: 10px;
     }
 
     .btn {
-      padding: 10px 18px;
+      padding: 10px 16px;
       border-radius: 8px;
       border: none;
       cursor: pointer;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 600;
       transition: all 0.3s ease;
       color: #fff;
+      flex: 0 1 calc(50% - 5px);
+      min-width: 120px;
     }
 
     .btn-post {
@@ -105,9 +108,9 @@
 
     <div class="actions">
       <button class="btn btn-post" onclick="goToPost()">Post Internship</button>
+      <button class="btn btn-view" onclick="location.href='company_internships.html'">View Posted</button>
+      <button class="btn btn-view" onclick="location.href='company_applicants.html'">View Applicants</button>
       <button class="btn btn-logout" onclick="logout()">Logout</button>
-      <button class="btn btn-view" onclick="location.href='company_applicants.html'"> View Applicants</button>
-
     </div>
 
     <a class="back-link" href="index.html">← Back to Home</a>
