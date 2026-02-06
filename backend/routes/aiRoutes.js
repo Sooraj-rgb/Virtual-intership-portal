@@ -11,12 +11,12 @@ function getReply(msg) {
   }
 
   // apply
-  if (msg.includes("apply")) {
+  if (msg.includes("how to apply internships") || msg.includes("apply for internships")) {
     return "Open Browse Internships, choose a role, and click the Apply button.";
   }
 
   // skills
-  if (msg.includes("skill")) {
+  if (msg.includes("skills") || msg.includes("required skills")) {
     return "Common skills: HTML, CSS, JavaScript, Python, React, Node, MongoDB.";
   }
 
