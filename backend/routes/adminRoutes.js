@@ -109,5 +109,22 @@ router.delete("/internships/:id", adminAuth, async (req, res) => {
   }
 });
 
+// DELETE company (ADMIN ONLY)
+router.delete("/companies/:id", adminAuth, async (req, res) => {
+  try {
+    const company = await Company.findById(req.params.id);
+
+    if (!company) {
+      return res.status(404).json({ message: "Company not found" });
+    }
+
+    await company.deleteOne();
+
+    res.status(200).json({ message: "Company deleted successfully" });
+  } catch (err) {
+    console.error("Admin delete company error:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
 
 module.exports = router;

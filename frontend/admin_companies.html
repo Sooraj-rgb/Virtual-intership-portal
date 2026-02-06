@@ -74,6 +74,23 @@
     .back-btn:hover {
       box-shadow: 0 4px 12px rgba(255, 77, 109, 0.4);
     }
+
+    .delete-btn {
+      padding: 6px 12px;
+      background: linear-gradient(90deg, #ff4d6d, #c9184a);
+      border: none;
+      border-radius: 6px;
+      color: white;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .delete-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 2px 8px rgba(255, 77, 109, 0.5);
+    }
   </style>
 </head>
 <body>
@@ -89,11 +106,12 @@
         <th>Industry</th>
         <th>Location</th>
         <th>Joined On</th>
+        <th>Actions</th>
       </tr>
     </thead>
     <tbody id="companiesTable">
       <tr>
-        <td colspan="5" style="text-align:center;">Loading companies...</td>
+        <td colspan="6" style="text-align:center;">Loading companies...</td>
       </tr>
     </tbody>
   </table>
@@ -124,7 +142,7 @@
       if (!companies.length) {
         table.innerHTML = `
           <tr>
-            <td colspan="5" style="text-align:center;">No companies found</td>
+            <td colspan="6" style="text-align:center;">No companies found</td>
           </tr>
         `;
         return;
@@ -138,6 +156,9 @@
           <td>${c.industry || "-"}</td>
           <td>${c.location || "-"}</td>
           <td>${new Date(c.createdAt).toLocaleDateString()}</td>
+          <td>
+            <button class="delete-btn" onclick="deleteCompany('${c._id}', '${c.name}')">Delete</button>
+          </td>
         `;
         table.appendChild(row);
       });
@@ -145,6 +166,32 @@
     } catch (err) {
       console.error(err);
       alert("Failed to load companies");
+    }
+  }
+
+  async function deleteCompany(companyId, companyName) {
+    if (!confirm(`Are you sure you want to delete "${companyName}"? This action cannot be undone.`)) {
+      return;
+    }
+
+    try {
+      const res = await fetch(`http://localhost:5000/api/admin/companies/${companyId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${adminToken}`,
+          "Content-Type": "application/json"
+        }
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to delete company");
+      }
+
+      alert("Company deleted successfully");
+      loadCompanies();
+    } catch (err) {
+      console.error(err);
+      alert("Failed to delete company");
     }
   }
 
