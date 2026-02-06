@@ -11,7 +11,7 @@ function getReply(msg) {
   }
 
   // apply
-  if (msg.includes("how to apply internships") || msg.includes("apply for internships")) {
+  if (msg.includes("apply")){
     return "Open Browse Internships, choose a role, and click the Apply button.";
   }
 
