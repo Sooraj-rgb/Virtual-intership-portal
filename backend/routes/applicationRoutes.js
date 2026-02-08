@@ -42,9 +42,35 @@ router.get("/company/:companyId", async (req, res) => {
       companyId: req.params.companyId,
     })
       .populate("studentId", "name email skills education")
-      .populate("internshipId", "title");
+      .populate("internshipId", "title requiredSkills description");
 
-    res.status(200).json(applications);
+    const withScores = applications.map((app) => {
+      const required = (app.internshipId?.requiredSkills || [])
+        .map((s) => s.toLowerCase().trim())
+        .filter(Boolean);
+      const studentSkills = (app.studentId?.skills || [])
+        .map((s) => s.toLowerCase().trim())
+        .filter(Boolean);
+
+      const textBlob = `${app.internshipId?.title || ""} ${app.internshipId?.description || ""} ${required.join(" ")}`.toLowerCase();
+      let matchedCount = 0;
+
+      if (studentSkills.length) {
+        matchedCount = studentSkills.filter((s) => textBlob.includes(s)).length;
+      }
+
+      const denominator = required.length || studentSkills.length || 1;
+      const matchScore = Math.round((matchedCount / denominator) * 100);
+
+      return {
+        ...app.toObject(),
+        matchScore,
+      };
+    });
+
+    withScores.sort((a, b) => b.matchScore - a.matchScore);
+
+    res.status(200).json(withScores);
   } catch (err) {
     console.error("Company view applicants error:", err);
     res.status(500).json({ error: "Server error" });

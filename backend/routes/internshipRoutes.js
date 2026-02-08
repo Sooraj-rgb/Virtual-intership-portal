@@ -23,10 +23,20 @@ function verifyCompanyToken(req, res, next) {
 // ✅ POST: Add Internship
 router.post("/add", verifyCompanyToken, async (req, res) => {
   try {
-    const { title, location, duration, stipend, description } = req.body;
+    const { title, location, duration, stipend, description, requiredSkills } = req.body;
 
     if (!title || !location || !duration || !description) {
       return res.status(400).json({ message: "Please fill all required fields" });
+    }
+
+    let skills = [];
+    if (Array.isArray(requiredSkills)) {
+      skills = requiredSkills;
+    } else if (typeof requiredSkills === "string") {
+      skills = requiredSkills
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
     }
 
     const internship = new Internship({
@@ -35,6 +45,7 @@ router.post("/add", verifyCompanyToken, async (req, res) => {
       duration,
       stipend,
       description,
+      requiredSkills: skills,
       companyId: req.companyId,
     });
 

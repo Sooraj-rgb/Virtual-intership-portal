@@ -2,6 +2,7 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Student = require("../models/Student");
+const studentAuth = require("../middleware/studentAuth");
 const router = express.Router();
 
 // ✅ Student Signup
@@ -63,6 +64,47 @@ router.post("/login", async (req, res) => {
 
   } catch (err) {
     console.error("❌ Login Error:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+// ✅ Update Student Profile
+router.put("/:id", studentAuth, async (req, res) => {
+  try {
+    if (req.studentId !== req.params.id) {
+      return res.status(403).json({ message: "Access denied" });
+    }
+
+    const { name, education, skills, resumeLink } = req.body;
+
+    const update = {
+      name,
+      education,
+      resumeLink,
+    };
+
+    if (Array.isArray(skills)) {
+      update.skills = skills;
+    } else if (typeof skills === "string") {
+      update.skills = skills
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
+    }
+
+    const student = await Student.findByIdAndUpdate(
+      req.params.id,
+      { $set: update },
+      { new: true, runValidators: true, select: "-password" }
+    );
+
+    if (!student) {
+      return res.status(404).json({ message: "Student not found" });
+    }
+
+    res.status(200).json({ message: "Profile updated", student });
+  } catch (err) {
+    console.error("❌ Update profile error:", err);
     res.status(500).json({ error: "Server error" });
   }
 });

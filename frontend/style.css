@@ -1,69 +1,171 @@
-/* style.css */
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap");
+
+:root {
+  --bg-0: #0b1020;
+  --bg-1: #0f172a;
+  --bg-2: #111b33;
+  --surface: rgba(19, 27, 47, 0.78);
+  --surface-strong: rgba(22, 33, 56, 0.92);
+  --border: rgba(255, 255, 255, 0.12);
+  --text: #eef3ff;
+  --muted: #9fb3c8;
+  --accent: #00d4ff;
+  --accent-2: #ff7a59;
+  --success: #18d97e;
+  --warning: #ffb020;
+  --danger: #ff5d5d;
+  --shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
+}
+
 * {
   box-sizing: border-box;
 }
 
-body {
-  font-family: "Poppins", sans-serif;
-  background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-  color: #fff;
-  min-height: 100vh;
-  margin: 0;
-  /* Remove global flex centering so pages can scroll normally */
+html, body {
+  height: 100%;
+  min-height: 100%;
 }
 
-/* Utility class to center auth-like pages without affecting global layout */
+html {
+  background: linear-gradient(180deg, var(--bg-0), var(--bg-1) 45%, var(--bg-2)) !important;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+body {
+  font-family: "Sora", sans-serif !important;
+  background: transparent !important;
+  color: var(--text) !important;
+  min-height: 100vh;
+  margin: 0;
+  position: relative;
+  overflow-x: hidden;
+}
+
+html::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  min-height: 100vh;
+  min-width: 100vw;
+  background:
+    radial-gradient(900px 400px at 10% -10%, rgba(0, 212, 255, 0.22), transparent 60%),
+    radial-gradient(700px 350px at 90% 10%, rgba(255, 122, 89, 0.18), transparent 60%),
+    radial-gradient(500px 320px at 50% 100%, rgba(24, 217, 126, 0.12), transparent 60%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+h1, h2, h3, h4 {
+  font-family: "Space Grotesk", sans-serif !important;
+  letter-spacing: 0.2px;
+  margin-top: 0;
+}
+
+p {
+  font-size: 14px;
+  margin-bottom: 20px;
+  color: var(--muted);
+}
+
+a {
+  color: var(--text);
+}
+
 .auth-center {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  padding: 24px 0;
 }
 
 .container {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(12px);
-  padding: 40px 50px;
-  border-radius: 20px;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+  border: 1px solid var(--border);
+  backdrop-filter: blur(14px);
+  padding: 42px 48px;
+  border-radius: 22px;
   text-align: center;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-  width: 400px;
+  box-shadow: var(--shadow);
+  width: 420px;
+  max-width: calc(100% - 32px);
 }
 
-h1 {
-  font-size: 28px;
-  margin-bottom: 10px;
+:where(.container, .dashboard, .card, .panel, .box, .internship-card) {
+  max-width: calc(100% - 32px) !important;
+  border: 1px solid var(--border) !important;
+  background: var(--surface) !important;
+  box-shadow: var(--shadow) !important;
 }
 
-p {
-  font-size: 14px;
-  margin-bottom: 25px;
-  opacity: 0.9;
+img, svg, video, iframe {
+  max-width: 100%;
+  height: auto;
+}
+
+table {
+  width: 100%;
+  max-width: 100%;
+  border-collapse: collapse;
+}
+
+.table-wrapper, .table-container {
+  width: 100%;
+  overflow-x: auto;
 }
 
 button {
   width: 100%;
-  padding: 12px;
+  padding: 12px 16px;
   margin: 10px 0;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border 0.2s ease;
+  background: linear-gradient(90deg, var(--accent), #00a3cc);
+  color: #04131a;
+  box-shadow: 0 10px 24px rgba(0, 212, 255, 0.25);
 }
 
 button:hover {
-  transform: scale(1.03);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(0, 212, 255, 0.35);
 }
 
 .login-btn {
-  background: #00c6ff;
-  color: white;
+  background: linear-gradient(90deg, var(--accent), #00a3cc);
+  color: #04131a;
 }
 
 .signup-btn {
-  background: #00ff88;
-  color: black;
+  background: linear-gradient(90deg, var(--accent-2), #ffb15e);
+  color: #2d1207;
+  box-shadow: 0 10px 24px rgba(255, 122, 89, 0.25);
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 12px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+  outline: none;
+  font-size: 14px;
+  transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+input::placeholder, textarea::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: rgba(0, 212, 255, 0.6);
+  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.15);
 }
 
 .popup {
@@ -79,123 +181,216 @@ button:hover {
 }
 
 .popup-content {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--surface);
+  border: 1px solid var(--border);
   padding: 30px;
-  border-radius: 15px;
+  border-radius: 16px;
   text-align: center;
-  width: 300px;
+  width: 320px;
+  box-shadow: var(--shadow);
 }
 
 .popup button {
-  background: #007bff;
+  background: linear-gradient(90deg, var(--accent), #00a3cc);
   margin: 8px 0;
   width: 80%;
 }
-/* For student signup button */
-button {
-  background: #00c6ff;
-}
-button:hover {
-  background: #0072ff;
-}
+
 #chatToggle {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  width: 55px;
-  height: 55px;
-  background: linear-gradient(135deg, #00eaff, #0077ff);
-  color: #000;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, var(--accent), #00a3cc);
+  color: #04131a;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
+  font-size: 26px;
   cursor: pointer;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+  box-shadow: 0 8px 25px rgba(0, 212, 255, 0.4);
   z-index: 9999;
+  transition: all 0.3s ease;
+  animation: float 3s ease-in-out infinite;
+}
+
+#chatToggle:hover {
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 12px 35px rgba(0, 212, 255, 0.5);
 }
 
 #chatWindow {
   position: fixed;
   bottom: 90px;
   right: 20px;
-  width: 320px;
-  height: 420px;
-  background: rgba(20,20,20,0.95);
-  border-radius: 16px;
+  width: 360px;
+  height: 480px;
+  background: var(--surface-strong);
+  border-radius: 20px;
   display: none;
   flex-direction: column;
   overflow: hidden;
-  box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
   z-index: 9999;
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
 }
 
 #chatHeader {
-  padding: 12px;
-  background: linear-gradient(90deg, #00eaff, #0077ff);
-  color: #000;
-  font-weight: 600;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, var(--accent), #00a3cc);
+  color: #04131a;
+  font-weight: 700;
+  font-size: 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 #chatHeader span {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.2);
   cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+}
+
+#chatHeader span:hover {
+  background: rgba(0, 0, 0, 0.3);
+  transform: rotate(90deg);
 }
 
 #chatBody {
   flex: 1;
-  padding: 10px;
+  padding: 16px;
   overflow-y: auto;
-  font-size: 13px;
+  font-size: 14px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.1));
+}
+
+#chatBody::-webkit-scrollbar {
+  width: 6px;
+}
+
+#chatBody::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
 }
 
 .msg {
-  margin-bottom: 8px;
-  padding: 8px 10px;
-  border-radius: 10px;
-  max-width: 80%;
-  line-height: 1.4;
+  margin-bottom: 12px;
+  padding: 12px 16px;
+  border-radius: 18px;
+  max-width: 85%;
+  line-height: 1.5;
+  font-size: 14px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 .user {
-  background: #00eaff;
-  color: #000;
+  background: linear-gradient(135deg, var(--accent), #00a3cc);
+  color: #04131a;
   margin-left: auto;
+  border-bottom-right-radius: 4px;
+  font-weight: 500;
 }
 
 .ai {
-  background: rgba(255,255,255,0.15);
-  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
   margin-right: auto;
+  border-bottom-left-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 #chatFooter {
   display: flex;
-  padding: 8px;
-  background: rgba(0,0,0,0.4);
+  padding: 12px 16px;
+  background: rgba(0, 0, 0, 0.3);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  gap: 10px;
 }
 
 #chatFooter input {
   flex: 1;
-  padding: 8px;
-  border-radius: 8px;
-  border: none;
+  padding: 12px 16px;
+  border-radius: 25px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  font-size: 14px;
   outline: none;
+  transition: all 0.2s ease;
+}
+
+#chatFooter input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.15);
+}
+
+#chatFooter input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
 }
 
 #chatFooter button {
-  margin-left: 6px;
-  padding: 8px 12px;
+  margin-left: 0;
+  padding: 12px 20px;
   border: none;
-  border-radius: 8px;
-  background: #00eaff;
-  color: #000;
+  border-radius: 25px;
+  background: linear-gradient(135deg, var(--accent), #00a3cc);
+  color: #04131a;
   cursor: pointer;
+  width: auto;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.2s ease;
 }
+
 #chatFooter button:hover {
-  background: #0077ff;
-  color: #fff;
+  background: linear-gradient(135deg, #00a3cc, var(--accent));
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 212, 255, 0.3);
+}
+
+#chatFooter button:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 600px) {
+  .container, .dashboard, .card, .panel, .box, .internship-card {
+    padding: 20px !important;
+  }
+
+  button {
+    width: 100%;
+  }
 }

@@ -89,6 +89,7 @@
       <input type="text" id="location" placeholder="Location (Remote / On-site)" required />
       <input type="text" id="duration" placeholder="Duration (e.g. 3 Months)" required />
       <input type="text" id="stipend" placeholder="Stipend (Optional)" />
+      <input type="text" id="requiredSkills" placeholder="Required Skills (comma separated)" />
       <textarea id="description" rows="4" placeholder="Internship Description" required></textarea>
       <button type="submit">Post Internship</button>
       <a class="back-link" href="company_dashboard.html">← Back to Dashboard</a>
@@ -118,6 +119,7 @@
           location: document.getElementById("location").value.trim(),
           duration: document.getElementById("duration").value.trim(),
           stipend: document.getElementById("stipend").value.trim(),
+          requiredSkills: document.getElementById("requiredSkills").value.trim(),
           description: document.getElementById("description").value.trim(),
           companyId: company._id,
         }),

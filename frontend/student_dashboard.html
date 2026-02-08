@@ -6,31 +6,58 @@
   <title>Student Dashboard | Virtual Internship Portal</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-    .dashboard {
-      text-align: center;
-      background: rgba(255, 255, 255, 0.1);
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
-      max-width: 420px;
-      width: calc(100% - 40px); /* responsive */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
-    @media (max-width: 480px) {
-      .dashboard { padding: 20px; }
-      h2 { font-size: 20px; }
-      h3 { font-size: 16px; }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .dashboard {
+      text-align: center;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 28px;
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      max-width: 640px;
+      width: min(640px, calc(100% - 32px));
+      margin: 0 auto;
+      max-height: calc(100vh - 48px);
+      overflow-y: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      animation: fadeInUp 0.8s ease-out;
+    }
+    .dashboard::-webkit-scrollbar {
+      display: none;
     }
 
     h2 {
       font-size: 24px;
       margin-bottom: 10px;
+      animation: fadeInUp 0.6s ease-out 0.2s both;
     }
 
     h3 {
       font-size: 18px;
-      color: #aef;
+      color: var(--accent);
       margin-bottom: 20px;
+      animation: fadeInUp 0.6s ease-out 0.4s both;
     }
 
     .info {
@@ -38,24 +65,320 @@
       margin-top: 15px;
       line-height: 1.6;
       font-size: 15px;
+      width: 100%;
+      animation: fadeInUp 0.6s ease-out 0.5s both;
     }
 
-    .logout-btn {
-      margin-top: 25px;
-      background: linear-gradient(90deg, #ff4b2b, #ff416c);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      padding: 10px 18px;
+    .profile-section {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .profile-avatar {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), #0099cc);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      font-weight: 700;
+      color: #04131a;
+      box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+    }
+
+    .profile-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #fff;
+      margin: 0 0 4px 0;
+    }
+
+    .profile-subtitle {
+      font-size: 14px;
+      color: var(--accent);
+      margin: 0;
+    }
+
+    .profile-details {
+      display: grid;
+      gap: 16px;
+    }
+
+    .profile-field {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 10px;
+      transition: all 0.2s ease;
+    }
+
+    .profile-field:hover {
+      background: rgba(255, 255, 255, 0.06);
+      transform: translateX(4px);
+    }
+
+    .profile-field-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(0, 153, 204, 0.2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .profile-field-content {
+      flex: 1;
+    }
+
+    .profile-field-label {
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .profile-field-value {
       font-size: 15px;
-      cursor: pointer;
-      transition: all 0.3s ease;
+      color: #fff;
+      word-break: break-word;
     }
 
-    .logout-btn:hover {
-      background: linear-gradient(90deg, #ff416c, #ff4b2b);
-      box-shadow: 0 5px 15px rgba(255, 65, 108, 0.4);
+    .profile-field-value a {
+      color: var(--accent);
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .profile-field-value a:hover {
+      color: #00eaff;
+      text-decoration: underline;
+    }
+
+    .skills-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .skill-tag {
+      padding: 4px 12px;
+      background: linear-gradient(90deg, rgba(0, 212, 255, 0.2), rgba(0, 153, 204, 0.2));
+      border-radius: 20px;
+      font-size: 13px;
+      color: var(--accent);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+    }
+
+    /* AI Recommendations Section */
+    .ai-section-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #00eaff;
+      margin: 24px 0 16px 0;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .ai-section-title::before {
+      content: "✨";
+      font-size: 18px;
+    }
+
+    .ai-results-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .rec-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 20px;
+      transition: all 0.3s ease;
+      animation: fadeInUp 0.5s ease-out;
+    }
+
+    .rec-card:nth-child(1) { animation-delay: 0.1s; }
+    .rec-card:nth-child(2) { animation-delay: 0.2s; }
+    .rec-card:nth-child(3) { animation-delay: 0.3s; }
+    .rec-card:nth-child(4) { animation-delay: 0.4s; }
+    .rec-card:nth-child(5) { animation-delay: 0.5s; }
+
+    .rec-card:hover {
+      background: rgba(255, 255, 255, 0.08);
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      border-color: rgba(0, 212, 255, 0.3);
+    }
+
+    .rec-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+
+    .rec-card-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #fff;
+      margin: 0;
+    }
+
+    .rec-card-company {
+      font-size: 14px;
+      color: var(--accent);
+      margin: 4px 0 0 0;
+    }
+
+    .match-score {
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(24, 217, 126, 0.2));
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent);
+      white-space: nowrap;
+    }
+
+    .rec-card-description {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.6;
+      margin: 12px 0;
+      padding: 12px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+    }
+
+    .rec-card-meta {
+      display: flex;
+      gap: 16px;
+      margin: 12px 0;
+      flex-wrap: wrap;
+    }
+
+    .rec-card-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .rec-card-meta-item span:first-child {
+      font-size: 14px;
+    }
+
+    .rec-card-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .rec-card-actions .apply-btn {
+      flex: 1;
+      margin-top: 0;
+    }
+
+    .loading-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .loading-state .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(255, 255, 255, 0.1);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      margin: 0 auto 16px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .empty-state-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+
+    .action-btn {
+      margin-top: 12px;
+      background: linear-gradient(90deg, var(--accent), #00a3cc);
+      color: #04131a;
+      border: none;
+      border-radius: 10px;
+      padding: 11px 18px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      width: 100%;
+      animation: fadeInUp 0.6s ease-out both;
+    }
+    .action-btn:nth-child(1) { animation-delay: 0.6s; }
+    .action-btn:nth-child(2) { animation-delay: 0.7s; }
+    .action-btn:nth-child(3) { animation-delay: 0.8s; }
+    .action-btn:nth-child(4) { animation-delay: 0.9s; }
+
+    .action-btn:hover {
       transform: translateY(-2px);
+      box-shadow: 0 8px 18px rgba(0, 212, 255, 0.25);
+    }
+
+    .action-btn.secondary {
+      background: linear-gradient(90deg, var(--accent-2), #ffb15e);
+      color: #2d1207;
+      box-shadow: 0 8px 18px rgba(255, 122, 89, 0.25);
+    }
+
+    .action-btn.warning {
+      background: linear-gradient(90deg, var(--warning), #ffd26b);
+      color: #2b1a00;
+      box-shadow: 0 8px 18px rgba(255, 176, 32, 0.25);
+    }
+
+    .action-btn.danger {
+      background: linear-gradient(90deg, var(--danger), #ff8b8b);
+      color: #2b0c0c;
+      box-shadow: 0 8px 18px rgba(255, 93, 93, 0.2);
     }
 
     .back-link {
@@ -71,37 +394,98 @@
       opacity: 1;
       text-decoration: underline;
     }
-    .browse-btn {
-      margin-top: 15px;
-      background: linear-gradient(90deg, #ff4b2b, #ff416c);
+
+    .apply-btn {
+      margin-top: 8px;
+      padding: 6px 12px;
+      background: linear-gradient(90deg, var(--accent), #0099cc);
+      color: #04131a;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .apply-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 12px rgba(0, 212, 255, 0.25);
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      padding: 20px;
+    }
+
+    .modal {
+      background: #0f1b2d;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      padding: 20px;
+      width: 100%;
+      max-width: 420px;
+      text-align: left;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+    }
+
+    .modal h3 {
+      margin-bottom: 12px;
+      color: #00eaff;
+    }
+
+    .modal label {
+      display: block;
+      font-size: 13px;
+      margin: 10px 0 6px;
+      color: #cfefff;
+    }
+
+    .modal input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.06);
       color: white;
-      border: none;
+      outline: none;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .modal-actions button {
+      flex: 1;
+      padding: 10px 12px;
       border-radius: 8px;
-      padding: 10px 18px;
-      font-size: 15px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    .browse-btn:hover {
-      background: linear-gradient(90deg, #ff416c, #ff4b2b);
-      box-shadow: 0 5px 15px rgba(255, 65, 108, 0.4);
-      transform: translateY(-2px);
-    }
-    .notification-btn {
-      margin-top: 15px;
-      background: linear-gradient(90deg, #fdbb2d, #ffaa00);
-      color: #000;
       border: none;
-      border-radius: 8px;
-      padding: 10px 18px;
-      font-size: 15px;
       cursor: pointer;
-      transition: all 0.3s ease;
+      font-size: 14px;
+      transition: all 0.2s ease;
     }
-    .notification-btn:hover {
-      background: linear-gradient(90deg, #ffaa00, #fdbb2d);
-      box-shadow: 0 5px 15px rgba(253, 187, 45, 0.4);
-      transform: translateY(-2px);
+
+    .save-btn {
+      background: linear-gradient(90deg, #00d4ff, #0099cc);
+      color: white;
+    }
+
+    .save-btn:hover {
+      background: linear-gradient(90deg, #0099cc, #00d4ff);
+    }
+
+    .cancel-btn {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
     }
   </style>
 </head>
@@ -110,165 +494,286 @@
     <h2 id="welcomeText">Welcome, Student</h2>
     <h3>Your Profile</h3>
 
-    <div class="info" id="profileInfo"></div>
-    <h3 style="margin-top:20px;color:#00eaff;">AI Recommended Internships</h3>
-    <div id="aiResults" class="info">
-    <p>Loading recommendations...</p>
+    <div class="profile-section" id="profileInfo"></div>
+    
+    <div class="ai-section-title">AI Recommended Internships</div>
+    <div id="aiResults" class="ai-results-container">
+      <div class="loading-state">
+        <div class="spinner"></div>
+        <p>Finding the best internships for you...</p>
+      </div>
     </div>
 
+    <button class="action-btn" onclick="openEditProfile()">Edit Profile</button>
+    <button class="action-btn secondary" onclick="browseInternships()">Browse Internships</button>
+    <button class="action-btn warning" onclick="viewNotifications()">Notifications</button>
+    <button class="action-btn danger" onclick="logout()">Logout</button>
+    <a class="back-link" href="index.html">Back to Home</a>
 
-    <button class="browse-btn" onclick="browseInternships()">Browse Internships</button>
-    <button class="notification-btn" onclick="viewNotifications()">📬 Notifications</button>
-    <button class="logout-btn" onclick="logout()">Logout</button>
-    <a class="back-link" href="index.html">← Back to Home</a>
-  <!-- Chat Toggle Button -->
-<div id="chatToggle" onclick="toggleChat()">💬</div>
+    <!-- Chat Toggle Button -->
+    <div id="chatToggle" onclick="toggleChat()">💬</div>
 
-<!-- Chat Window -->
-<div id="chatWindow">
-  <div id="chatHeader">
-    AI Assistant
-    <span onclick="toggleChat()">✕</span>
-  </div>
+    <!-- Chat Window -->
+    <div id="chatWindow">
+      <div id="chatHeader">
+        AI Assistant
+        <span onclick="toggleChat()">✕</span>
+      </div>
 
-  <div id="chatBody"></div>
+      <div id="chatBody"></div>
 
-  <div id="chatFooter">
-    <input id="chatInput" placeholder="Ask something..." />
-    <button onclick="sendMsg()">Send</button>
-  </div>
-</div>
+      <div id="chatFooter">
+        <input id="chatInput" placeholder="Ask something..." />
+        <button onclick="sendMsg()">Send</button>
+      </div>
+    </div>
 
+    <!-- Edit Profile Modal -->
+    <div id="editModal" class="modal-backdrop">
+      <div class="modal">
+        <h3>Edit Profile</h3>
+        <label for="editName">Name</label>
+        <input id="editName" type="text" placeholder="Your name" />
 
+        <label for="editEducation">Education</label>
+        <input id="editEducation" type="text" placeholder="e.g., B.Sc. Computer Science" />
 
-  <script>
-    const studentData = JSON.parse(localStorage.getItem("student"));
-    const token = localStorage.getItem("token");
+        <label for="editSkills">Skills (comma separated)</label>
+        <input id="editSkills" type="text" placeholder="HTML, CSS, JavaScript" />
 
-    if (!token || !studentData) {
-      alert("Unauthorized! Please log in first.");
-      window.location.href = "student_login.html";
-    }
+        <label for="editResume">Resume Link</label>
+        <input id="editResume" type="url" placeholder="https://..." />
 
-    // display info
-    document.getElementById("welcomeText").innerText = `Welcome, ${studentData.name || "Student"} 👋`;
+        <div class="modal-actions">
+          <button class="save-btn" onclick="saveProfile()">Save</button>
+          <button class="cancel-btn" onclick="closeEditProfile()">Cancel</button>
+        </div>
+      </div>
+    </div>
 
-    document.getElementById("profileInfo").innerHTML = `
-      <strong>Email:</strong> ${studentData.email} <br>
-      <strong>Education:</strong> ${studentData.education || "Not specified"} <br>
-      <strong>Skills:</strong> ${(studentData.skills || []).join(", ")} <br>
-      <strong>Resume:</strong> ${
-        studentData.resumeLink
-          ? `<a href="${studentData.resumeLink}" target="_blank">View Resume</a>`
-          : "Not uploaded"
+    <script>
+      let studentData = JSON.parse(localStorage.getItem("student"));
+      const token = localStorage.getItem("token");
+
+      if (!token || !studentData) {
+        alert("Unauthorized! Please log in first.");
+        window.location.href = "student_login.html";
       }
-    `;
 
-    function logout() {
-      localStorage.removeItem("token");
-      localStorage.removeItem("student");
-      alert("Logged out successfully!");
-      window.location.href = "index.html";
-    }
-    
-    function browseInternships() {
-      window.location.href = "browse_internships.html";
-    }
-    
-    function viewNotifications() {
-      window.location.href = "student_notifications.html";
-    }
-async function loadAIRecommendations() {
-  try {
-    const res = await fetch(
-      `http://localhost:5000/api/internships/recommend/${studentData._id}`
-    );
-    const data = await res.json();
+      function renderProfile() {
+        const initials = (studentData.name || "S").charAt(0).toUpperCase();
+        const skillsHtml = (studentData.skills || []).length > 0 
+          ? studentData.skills.map(skill => '<span class="skill-tag">' + skill + '</span>').join("")
+          : '<span class="skill-tag">No skills added</span>';
+        document.getElementById("welcomeText").innerText = "Welcome, " + (studentData.name || "Student") + " 👋";
+        document.getElementById("profileInfo").innerHTML = 
+          '<div class="profile-header">' +
+            '<div class="profile-avatar">' + initials + '</div>' +
+            '<div>' +
+              '<div class="profile-title">' + (studentData.name || "Student") + '</div>' +
+              '<div class="profile-subtitle">Student Profile</div>' +
+            '</div>' +
+          '</div>' +
+          '<div class="profile-details">' +
+            '<div class="profile-field">' +
+              '<div class="profile-field-icon">📧</div>' +
+              '<div class="profile-field-content">' +
+                '<div class="profile-field-label">Email</div>' +
+                '<div class="profile-field-value">' + studentData.email + '</div>' +
+              '</div>' +
+            '</div>' +
+            '<div class="profile-field">' +
+              '<div class="profile-field-icon">🎓</div>' +
+              '<div class="profile-field-content">' +
+                '<div class="profile-field-label">Education</div>' +
+                '<div class="profile-field-value">' + (studentData.education || "Not specified") + '</div>' +
+              '</div>' +
+            '</div>' +
+            '<div class="profile-field">' +
+              '<div class="profile-field-icon">💡</div>' +
+              '<div class="profile-field-content">' +
+                '<div class="profile-field-label">Skills</div>' +
+                '<div class="skills-container">' + skillsHtml + '</div>' +
+              '</div>' +
+            '</div>' +
+            '<div class="profile-field">' +
+              '<div class="profile-field-icon">📄</div>' +
+              '<div class="profile-field-content">' +
+                '<div class="profile-field-label">Resume</div>' +
+                '<div class="profile-field-value">' +
+                  (studentData.resumeLink 
+                    ? '<a href="' + studentData.resumeLink + '" target="_blank">View Resume</a>'
+                    : "Not uploaded") +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+          '</div>';
+      }
 
-    const box = document.getElementById("aiResults");
-    box.innerHTML = "";
+      renderProfile();
 
-    if (!data.length) {
-      box.innerHTML = "<p>No recommendations available.</p>";
-      return;
-    }
+      function logout() {
+        localStorage.removeItem("token");
+        localStorage.removeItem("student");
+        alert("Logged out successfully!");
+        window.location.href = "index.html";
+      }
+      
+      function browseInternships() {
+        window.location.href = "browse_internships.html";
+      }
+      
+      function viewNotifications() {
+        window.location.href = "student_notifications.html";
+      }
 
-    data.slice(0, 5).forEach(item => {
-      const div = document.createElement("div");
-      div.style.marginBottom = "15px";
-      div.style.padding = "10px";
-      div.style.border = "1px solid rgba(255, 255, 255, 0.2)";
-      div.style.borderRadius = "8px";
-      div.innerHTML = `
-        <strong>${item.internship.title}</strong><br>
-        Company: ${item.internship.companyId.name}<br>
-        Match Score: <b>${item.matchScore}%</b><br>
-        <button onclick="applyForInternship('${item.internship._id}')" style="margin-top: 8px; padding: 6px 12px; background: linear-gradient(90deg, #00d4ff, #0099cc); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; transition: all 0.3s ease;" onmouseover="this.style.background='linear-gradient(90deg, #0099cc, #00d4ff)'" onmouseout="this.style.background='linear-gradient(90deg, #00d4ff, #0099cc)'">Apply Now</button>
-      `;
-      box.appendChild(div);
-    });
-  } catch (err) {
-    console.error("AI load error:", err);
-  }
-}
+      function openEditProfile() {
+        document.getElementById("editName").value = studentData.name || "";
+        document.getElementById("editEducation").value = studentData.education || "";
+        document.getElementById("editSkills").value = (studentData.skills || []).join(", ");
+        document.getElementById("editResume").value = studentData.resumeLink || "";
+        document.getElementById("editModal").style.display = "flex";
+      }
 
-async function applyForInternship(internshipId) {
-  try {
-    const res = await fetch("http://localhost:5000/api/applications/apply", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        studentId: studentData._id,
-        internshipId: internshipId
-      })
-    });
+      function closeEditProfile() {
+        document.getElementById("editModal").style.display = "none";
+      }
 
-    const data = await res.json();
-    
-    if (!res.ok) {
-      alert(data.message || "Failed to apply");
-      return;
-    }
+      async function saveProfile() {
+        const name = document.getElementById("editName").value.trim();
+        const education = document.getElementById("editEducation").value.trim();
+        const skillsInput = document.getElementById("editSkills").value.trim();
+        const resumeLink = document.getElementById("editResume").value.trim();
 
-    alert("Application submitted successfully! 🎉");
-    // Reload recommendations after applying
-    loadAIRecommendations();
-  } catch (err) {
-    console.error("Apply error:", err);
-    alert("Error submitting application. Please try again.");
-  }
-}
+        const skills = skillsInput
+          ? skillsInput.split(",").map((s) => s.trim()).filter(Boolean)
+          : [];
 
-// call it when dashboard loads
-loadAIRecommendations();
+        try {
+          const res = await fetch("http://localhost:5000/api/students/" + studentData._id, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer " + token
+            },
+            body: JSON.stringify({ name, education, skills, resumeLink })
+          });
 
-function toggleChat() {
-  const win = document.getElementById("chatWindow");
-  win.style.display = win.style.display === "flex" ? "none" : "flex";
-}
+          const data = await res.json();
+          if (!res.ok) {
+            alert(data.message || "Failed to update profile");
+            return;
+          }
 
-async function sendMsg() {
-  const input = document.getElementById("chatInput");
-  const body = document.getElementById("chatBody");
-  const msg = input.value.trim();
-  if (!msg) return;
+          studentData = data.student;
+          localStorage.setItem("student", JSON.stringify(studentData));
+          renderProfile();
+          closeEditProfile();
+          alert("Profile updated successfully!");
+        } catch (err) {
+          console.error("Profile update error:", err);
+          alert("Error updating profile. Please try again.");
+        }
+      }
 
-  body.innerHTML += `<div class="msg user">${msg}</div>`;
-  input.value = "";
+      async function loadAIRecommendations() {
+        try {
+          const res = await fetch("http://localhost:5000/api/internships/recommend/" + studentData._id);
+          const data = await res.json();
 
-  const res = await fetch("http://localhost:5000/api/ai/chat", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ message: msg })
-  });
+          const box = document.getElementById("aiResults");
+          box.innerHTML = "";
 
-  const data = await res.json();
-  body.innerHTML += `<div class="msg ai">${data.reply}</div>`;
-  body.scrollTop = body.scrollHeight;
-}
+          // Filter internships with match score >= 15%
+          const filteredData = data.filter(item => item.matchScore >= 15);
 
-  </script>
+          if (!filteredData.length) {
+            box.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🔍</div><p>No good matches found. Update your profile to get better recommendations!</p></div>';
+            return;
+          }
+
+          filteredData.slice(0, 5).forEach(item => {
+            const div = document.createElement("div");
+            div.className = "rec-card";
+            div.innerHTML = 
+              '<div class="rec-card-header">' +
+                '<div>' +
+                  '<h4 class="rec-card-title">' + item.internship.title + '</h4>' +
+                  '<p class="rec-card-company">' + item.internship.companyId.name + '</p>' +
+                '</div>' +
+                '<div class="match-score">' + item.matchScore + '% Match</div>' +
+              '</div>' +
+              '<div class="rec-card-description">' + (item.internship.description || "No description available.") + '</div>' +
+              '<div class="rec-card-meta">' +
+                '<div class="rec-card-meta-item"><span>📍</span> ' + (item.internship.location || "Remote") + '</div>' +
+                '<div class="rec-card-meta-item"><span>⏱️</span> ' + (item.internship.duration || "3 months") + '</div>' +
+                '<div class="rec-card-meta-item"><span>💰</span> ' + (item.internship.stipend || "Unpaid") + '</div>' +
+              '</div>' +
+              '<div class="rec-card-actions">' +
+                '<button class="apply-btn" onclick="applyForInternship(\\\'' + item.internship._id + '\\\')">Apply Now</button>' +
+              '</div>';
+            box.appendChild(div);
+          });
+        } catch (err) {
+          console.error("AI load error:", err);
+        }
+      }
+
+      async function applyForInternship(internshipId) {
+        try {
+          const res = await fetch("http://localhost:5000/api/applications/apply", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              studentId: studentData._id,
+              internshipId: internshipId
+            })
+          });
+
+          const data = await res.json();
+          
+          if (!res.ok) {
+            alert(data.message || "Failed to apply");
+            return;
+          }
+
+          alert("Application submitted successfully!");
+          loadAIRecommendations();
+        } catch (err) {
+          console.error("Apply error:", err);
+          alert("Error submitting application. Please try again.");
+        }
+      }
+
+      loadAIRecommendations();
+
+      function toggleChat() {
+        const win = document.getElementById("chatWindow");
+        win.style.display = win.style.display === "flex" ? "none" : "flex";
+      }
+
+      async function sendMsg() {
+        const input = document.getElementById("chatInput");
+        const body = document.getElementById("chatBody");
+        const msg = input.value.trim();
+        if (!msg) return;
+
+        body.innerHTML += '<div class="msg user">' + msg + '</div>';
+        input.value = "";
+
+        const res = await fetch("http://localhost:5000/api/ai/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: msg })
+        });
+
+        const data = await res.json();
+        body.innerHTML += '<div class="msg ai">' + data.reply + '</div>';
+        body.scrollTop = body.scrollHeight;
+      }
+    </script>
+  </div>
 </body>
 </html>
