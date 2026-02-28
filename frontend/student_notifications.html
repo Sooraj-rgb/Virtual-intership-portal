@@ -136,7 +136,7 @@
 
     async function fetchNotifications() {
       try {
-        const res = await fetch(`http://localhost:5000/api/applications/student/${student._id}`);
+        const res = await fetch(`https://virtual-intership-portal.onrender.com/api/applications/student/${student._id}`);
         const applications = await res.json();
 
         const container = document.getElementById("notificationsContainer");

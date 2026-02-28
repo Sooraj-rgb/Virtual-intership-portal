@@ -215,7 +215,7 @@
 
     async function fetchInternships() {
       try {
-        const res = await fetch("http://localhost:5000/api/internships/all");
+        const res = await fetch("https://virtual-intership-portal.onrender.com/api/internships/all");
         allInternships = await res.json();
         displayInternships(allInternships);
       } catch (err) {
@@ -281,7 +281,7 @@
     function applyInternship(internshipId) {
       const student = JSON.parse(localStorage.getItem("student"));
 
-      fetch("http://localhost:5000/api/applications/apply", {
+      fetch("https://virtual-intership-portal.onrender.com/api/applications/apply", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

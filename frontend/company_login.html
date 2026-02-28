@@ -95,7 +95,7 @@
     document.getElementById("loginForm").addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      const res = await fetch("http://localhost:5000/api/companies/login", {
+      const res = await fetch("https://virtual-intership-portal.onrender.com/api/companies/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

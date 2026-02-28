@@ -4,7 +4,7 @@
 <script>
 const company = JSON.parse(localStorage.getItem("company"));
 
-fetch(`http://localhost:5000/api/applications/company/${company._id}`)
+fetch(`https://virtual-intership-portal.onrender.com/api/applications/company/${company._id}`)
   .then(res => res.json())
   .then(data => {
     const list = document.getElementById("list");
@@ -26,7 +26,7 @@ fetch(`http://localhost:5000/api/applications/company/${company._id}`)
   });
 
 function updateStatus(id, status) {
-  fetch(`http://localhost:5000/api/applications/${id}/status`, {
+  fetch(`https://virtual-intership-portal.onrender.com/api/applications/${id}/status`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ status }),

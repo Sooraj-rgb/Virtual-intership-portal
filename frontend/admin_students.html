@@ -121,7 +121,7 @@
 
   async function loadStudents() {
     try {
-      const res = await fetch("http://localhost:5000/api/admin/students", {
+      const res = await fetch("https://virtual-intership-portal.onrender.com/api/admin/students", {
         headers: {
           Authorization: `Bearer ${adminToken}`
         }

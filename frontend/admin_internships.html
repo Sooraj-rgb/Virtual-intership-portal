@@ -120,7 +120,7 @@
 
   async function loadInternships() {
     try {
-      const res = await fetch("http://localhost:5000/api/admin/internships", {
+      const res = await fetch("https://virtual-intership-portal.onrender.com/api/admin/internships", {
         headers: {
           Authorization: `Bearer ${adminToken}`
         }
@@ -170,7 +170,7 @@
 
   try {
     const res = await fetch(
-      `http://localhost:5000/api/admin/internships/${id}`,
+      `https://virtual-intership-portal.onrender.com/api/admin/internships/${id}`,
       {
         method: "DELETE",
         headers: {

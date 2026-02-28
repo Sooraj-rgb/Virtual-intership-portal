@@ -108,7 +108,7 @@
     document.getElementById("internshipForm").addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      const res = await fetch("http://localhost:5000/api/internships/add", {
+      const res = await fetch("https://virtual-intership-portal.onrender.com/api/internships/add", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

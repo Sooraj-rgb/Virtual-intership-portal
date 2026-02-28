@@ -66,7 +66,7 @@ console.log("Company ID:", company?._id);
 if (!company || !company._id) {
   document.getElementById("list").innerHTML = "<p style='color:red;'>Error: Company not logged in. Please log in first.</p>";
 } else {
-  fetch(`http://localhost:5000/api/applications/company/${company._id}`, {
+  fetch(`https://virtual-intership-portal.onrender.com/api/applications/company/${company._id}`, {
     headers: {
       "Authorization": "Bearer " + token
     }
@@ -149,7 +149,7 @@ if (!company || !company._id) {
 }
 
 function updateStatus(applicationId, status) {
-  fetch(`http://localhost:5000/api/applications/${applicationId}/status`, {
+  fetch(`https://virtual-intership-portal.onrender.com/api/applications/${applicationId}/status`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ status })

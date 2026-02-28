@@ -124,7 +124,7 @@
     document.getElementById("signupForm").addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      const res = await fetch("http://localhost:5000/api/companies/signup", {
+      const res = await fetch("https://virtual-intership-portal.onrender.com/api/companies/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

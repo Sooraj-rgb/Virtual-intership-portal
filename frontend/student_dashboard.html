@@ -650,7 +650,7 @@
           : [];
 
         try {
-          const res = await fetch("http://localhost:5000/api/students/" + studentData._id, {
+          const res = await fetch("https://virtual-intership-portal.onrender.com/api/students/" + studentData._id, {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
@@ -678,7 +678,7 @@
 
       async function loadAIRecommendations() {
         try {
-          const res = await fetch("http://localhost:5000/api/internships/recommend/" + studentData._id);
+          const res = await fetch("https://virtual-intership-portal.onrender.com/api/internships/recommend/" + studentData._id);
           const data = await res.json();
 
           const box = document.getElementById("aiResults");
@@ -721,7 +721,7 @@
 
       async function applyForInternship(internshipId) {
         try {
-          const res = await fetch("http://localhost:5000/api/applications/apply", {
+          const res = await fetch("https://virtual-intership-portal.onrender.com/api/applications/apply", {
             method: "POST",
             headers: {
               "Content-Type": "application/json"
@@ -763,7 +763,7 @@
         body.innerHTML += '<div class="msg user">' + msg + '</div>';
         input.value = "";
 
-        const res = await fetch("http://localhost:5000/api/ai/chat", {
+        const res = await fetch("https://virtual-intership-portal.onrender.com/api/ai/chat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ message: msg })
